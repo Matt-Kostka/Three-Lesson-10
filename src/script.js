@@ -2,6 +2,49 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
+ * Textures
+ */
+const loadingManager = new THREE.LoadingManager()
+loadingManager.onStart = () =>
+{
+    console.log('loading started')
+}
+loadingManager.onLoad = () =>
+{
+    console.log('loading finished')
+}
+loadingManager.onProgress = () =>
+{
+    console.log('loading progressing')
+}
+loadingManager.onError = () =>
+{
+    console.log('loading error')
+}
+const textureLoader = new THREE.TextureLoader(loadingManager)
+const colorTexture = textureLoader.load("/textures/minecraft.png")
+colorTexture.colorSpace = THREE.SRGBColorSpace
+colorTexture.wrapS = THREE.RepeatWrapping
+colorTexture.wrapT = THREE.RepeatWrapping
+
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+const heightTexture = textureLoader.load('/textures/door/height.jpg')
+const normalTexture = textureLoader.load('/textures/door/normal.jpg')
+const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+// const image = new Image()
+// const texture = new THREE.Texture(image)
+// texture.colorSpace = THREE.SRGBColorSpace
+// image.onload = () => {
+//     texture.needsUpdate = true
+// }
+// image.src = "/textures/door/color.jpg"
+colorTexture.generateMipmaps = false
+colorTexture.minFilter = THREE.NearestFilter
+colorTexture.magFilter = THREE.NearestFilter
+
+/**
  * Base
  */
 // Canvas
@@ -14,7 +57,7 @@ const scene = new THREE.Scene()
  * Object
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const material = new THREE.MeshBasicMaterial({ map: colorTexture })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
